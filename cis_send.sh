@@ -7,15 +7,14 @@
 # cis_send hwxx ta_pennkey
 
 # hwxx is the name of a directory with a subdirectory titled student_pennkey for each
-# student you wish to send email to. Within each folder is a file caled comments.txt, 
-# this is the file which will be sent via email. 
+# student you wish to send email to. Within each folder is a file called comments.txt, 
+# this is the file which will be sent via email. The TA will be bcc'd on all emails.
 
 # In the directory which contains hwxx there should be 2 files present: preamble.txt postamble.txt
 # These files are prepended and appended accordingly to your style comments within the message.
 
-# Output = preamble.txt ^ comments.txt ^ postamble.txt
-
-# - Do not use any double quotes in your comments.txt file
+# - Output = preamble.txt ^ comments.txt ^ postamble.txt
+# - Do not use any double quotes in your txt files
 # - Any instance of the follwing will be replaced accordingly:
 # 		+ NAME -> will be replaced with the students first name
 # 		+ HWXX -> will be replaced with the current hw (the input hwxx)
