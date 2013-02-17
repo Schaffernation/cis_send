@@ -3,8 +3,9 @@
 # USAGE:
 # cis_send hwxx ta_pennkey
 
-# hwxx is the name of a directory with a text file titled student_pennkey for each
-# student you wish to send email to.
+# hwxx is the name of a directory with a subdirectory titled student_pennkey for each
+# student you wish to send email to. Within each folder is a file caled comments.txt, 
+# this is the file which will be sent via email.
  
 # In the directory which contains hwxx there should be 2 files present: preamble.txt postamble.txt
 # These files are prepended and appended accordingly to your style comments within the message.
@@ -44,7 +45,7 @@ send () {
 	REST=$(echo $CAPNAME | tail -c+2 | tr [A-Z] [a-z])
 	NAME=$FLETTER$REST
 
-	EmailMessage="$(cat preamble.txt)\n$(cat $2/$1)\n\n$(cat postamble.txt)"
+	EmailMessage="$(cat preamble.txt)\n$(cat $2/$1/comments.txt)\n\n$(cat postamble.txt)"
 
 	EmailMessage=$(printf "$EmailMessage" | sed "s/HWXX/$HWxx/g" | sed "s/NAME/$NAME/g")
 
