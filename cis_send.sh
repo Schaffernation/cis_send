@@ -58,8 +58,7 @@ subject="[cis120] $hwxx - style"
 send () {
 	pennkey=$1
 
-	cptl_name=$(ssh cis120@minus.seas.upenn.edu "cis get roster $pennkey")
-	cptl_name=$(echo $cptl_name | tr [a-z] [A-Z] | tail -1 | grep -ow '[A-Z]*' | head -2 | tail -1)
+	cptl_name=$(ssh cis120@minus.seas.upenn.edu "cis get roster $pennkey | tr [a-z] [A-Z] | tail -1 | grep -ow '[A-Z]*' | head -2 | tail -1")
 	fst_ltr=$(echo $cptl_name | head -c 1)
 	rst_ltrs=$(echo $cptl_name | tail -c+2 | tr [A-Z] [a-z])
 
