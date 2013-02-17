@@ -2,53 +2,67 @@
 
 # Authors: Noam Zilberstein
 # 		   Joe Schaffer
+usage()
+{
+cat <<EOF
 
-# USAGE
-# 	./cis_send hwxx ta_pennkey
+	Emails student grading comments to each student.
 
-# 	hwxx is the name of a directory with a subdirectory titled student_pennkey
-#   for each student you wish to send email to. Within each folder is a file 
-#   called comments.txt, this is the file which will be sent via email. The TA
-#   will be bcc'd on all emails.
+ USAGE
+ 	$0 hwxx ta_pennkey
 
-# 	In the directory which contains hwxx there should be 2 files present: 
-#   - preamble.txt, postamble.txt
-# 		These files are prepended and appended to your style comments within
-# 		the message.
+ 	hwxx is the name of a directory with a subdirectory titled student_pennkey
+	for each student you wish to send email to. Within each folder is a file 
+	called comments.txt, this is the file which will be sent via email. The TA
+	will be bcc'd on all emails.
 
-# 	- Output = preamble.txt ^ comments.txt ^ postamble.txt
-#	- Do not use any double quotes in your txt files
-#	- Any instance of the follwing will be replaced accordingly:
-# 		+ NAME -> will be replaced with the students first name
-# 		+ HWXX -> will be replaced with the current hw (the input hwxx)
+	In the directory which contains hwxx there should be 2 files present: 
+	- preamble.txt, postamble.txt
+		These files are prepended and appended to your style comments within
+		the message.
 
-# EXAMPLE									# OUTPUT EMAIL
-# 	./cis_send hw04 sweirich				# 	Hi Joe,
-#											#
-# SET-UP									#   here are your grades for hw04.
-#	ls .									#
-#	 	preamble.txt						#	No mistakes!
-#    	postamble.txt						#   
-#	 	hw04								#   best, 
-#			jschaf							#   Stephanie
-#				 dna.ml 					
-#				 etc.ml 					
-#				 comments.txt
-#			noamz
-#				 dna.ml
-#				 etc.ml
-#				 comments.txt
+	- Output = preamble.txt ^ comments.txt ^ postamble.txt
+	- Do not use any double quotes in your txt files
+	- Any instance of the follwing will be replaced accordingly:
+		+ NAME -> will be replaced with the students first name
+		+ HWXX -> will be replaced with the current hw (the input hwxx)
 
-# 	cat preamble.txt
-#		Hi NAME,
-#		Here is your style score for HWXX.
+ EXAMPLE                    			OUTPUT EMAIL
+	./cis_send hw04 sweirich			Hi Joe,
 
-#	cat postamble.txt
-#		best,
-#		Stephanie
+ SET-UP	       						here are your grades for hw04.
+	ls .
+		  preamble.txt				No mistakes!
+		  postamble.txt	 
+		  hw04					best, 
+		    jschaf				Stephanie
+		      dna.ml 					
+		      etc.ml 					
+		      comments.txt
+		    noamz
+		      dna.ml
+		      etc.ml
+		      comments.txt
 
-#   cat hw04/jschaf/comments.txt
-#		No mistakes!
+	cat preamble.txt
+		Hi NAME,
+		Here is your style score for HWXX.
+
+	cat postamble.txt
+		best,
+		Stephanie
+
+	cat hw04/jschaf/comments.txt
+		No mistakes!
+
+EOF
+}
+
+if [ $# -ne 2 ]
+then
+	usage
+	exit 1
+fi
 
 hwxx=$1
 ta=$2

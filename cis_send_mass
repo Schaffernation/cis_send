@@ -1,20 +1,32 @@
 #!/bin/sh
 
-# USAGE
-# 	./cis_send_mass subject message.txt ta_pennkey pennkey_file
+usage()
+{
+cat <<EOF
+ 
+ USAGE 
+	$0 subject ta_pennkey students_pennkey_file message_file
+	$0 subject ta_pennkey students_pennkey_file
+
+	Emails all the students in students_pennkey_file from ta_pennkey. If the
+	message_file is provided then it will be the contents of the email. If not
+	the message can be entered into the terminal and send with a conclusion of
+	CTRL-D
+
+EOF
+}
 
 num_in=$#
 
-if [ $num_in != 4 ]
+if [ $num_in -gt 4 ] || [ $num_in -lt 3 ]
 then
-	echo 'Wrong number of inputs'
+	usage
 	exit 1
 fi
 
 subject=$1
-message=$(cat $2)
-ta=$3
-students=$(cat $4)
+ta=$2
+students=$(cat $3)
 
 ta_email=$(ssh cis120@minus.seas.upenn.edu "cis get email $ta")
 student_emails=''
@@ -27,4 +39,11 @@ done
 
 student_emails=$(echo $student_emails | tail -c +2)
 
+
+if [ -z "$4" ]
+then
+	echo 'Type your message followed by CTRL-D'
+fi
+
+message=$(cat $4)
 ssh $ta@eniac.seas.upenn.edu "printf \"$message\" | mail -s '$subject' -b $ta_email '$student_emails'"
