@@ -5,7 +5,8 @@
 
 # hwxx is the name of a directory with a subdirectory titled student_pennkey for each
 # student you wish to send email to. Within each folder is a file caled comments.txt, 
-# this is the file which will be sent via email.
+# this is the file which will be sent via email. Do not use any double quotes in your
+# comments.txt file.
  
 # In the directory which contains hwxx there should be 2 files present: preamble.txt postamble.txt
 # These files are prepended and appended accordingly to your style comments within the message.
