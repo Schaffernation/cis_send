@@ -1,37 +1,61 @@
 #!/bin/sh
 
+# Authors: Noam Zilberstein
+# 		   Joe Schaffer
+
 # USAGE:
 # cis_send hwxx ta_pennkey
 
 # hwxx is the name of a directory with a subdirectory titled student_pennkey for each
 # student you wish to send email to. Within each folder is a file caled comments.txt, 
-# this is the file which will be sent via email. Do not use any double quotes in your
-# comments.txt file.
- 
+# this is the file which will be sent via email. 
+
 # In the directory which contains hwxx there should be 2 files present: preamble.txt postamble.txt
 # These files are prepended and appended accordingly to your style comments within the message.
 
-# The student's name will be extracted from the database and prepended to the email with a 
-# customized greeting. The TA will be bcc'd on each email, for their own records.
+# Output = preamble.txt ^ comments.txt ^ postamble.txt
+
+# - Do not use any double quotes in your comments.txt file
+# - Any instance of the follwing will be replaced accordingly:
+# 		+ NAME -> will be replaced with the students first name
+# 		+ HWXX -> will be replaced with the current hw (the input hwxx)
 
 # Example:
-#	ls . ->
-#	 	pramble.txt - contains the introduction (here are your grades etc.)
-#    	postamble.txt - conatins the conclusion and signature (best, Stephanie)
+#	ls .
+#	 	preamble.txt
+#    	postamble.txt
 #	 	hw04
-#			jschaf - contains the comments for jschaf's hw (No mistakes!)
+#			jschaf
+#				 dna.ml
+#				 etc.ml
+#				 comments.txt
 #			noamz
+#				 dna.ml
+#				 etc.ml
+#				 comments.txt
+
+# 	cat preamble.txt
+#		Hi NAME,
+#		Here is your style score for HWXX.
+
+#	cat postamble.txt
+#		best,
+#		Stephanie
+
+#   cat hw04/jschaf/comments.txt
+#		No mistakes!
+
 
 # 	./cis_send hw04 sweirich
 
 # Output Email:
 # 	Hi Joe,
-# 
-# 	here are your grades etc.
+# 	here are your grades for hw04.
 #
 # 	No mistakes!
 #
-# 	best, Stephanie
+# 	best, 
+#   Stephanie
 
 
 HWxx=$1
