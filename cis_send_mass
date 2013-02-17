@@ -1,0 +1,30 @@
+#!/bin/sh
+
+# USAGE
+# 	./cis_send_mass subject message.txt ta_pennkey pennkey_file
+
+num_in=$#
+
+if [ $num_in != 4 ]
+then
+	echo 'Wrong number of inputs'
+	exit 1
+fi
+
+subject=$1
+message=$(cat $2)
+ta=$3
+students=$(cat $4)
+
+ta_email=$(ssh cis120@minus.seas.upenn.edu "cis get email $ta")
+student_emails=''
+
+for pennkey in $students
+do
+	student_email=$(ssh cis120@minus.seas.upenn.edu "cis get email $pennkey")
+	student_emails="$student_emails, $student_email"
+done
+
+student_emails=$(echo $student_emails | tail -c +2)
+
+ssh $ta@eniac.seas.upenn.edu "printf \"$message\" | mail -s '$subject' -b $ta_email '$student_emails'"
