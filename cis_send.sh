@@ -4,7 +4,7 @@
 # 		   Joe Schaffer
 
 # USAGE
-# 	cis_send hwxx ta_pennkey
+# 	./cis_send hwxx ta_pennkey
 
 # 	hwxx is the name of a directory with a subdirectory titled student_pennkey
 #   for each student you wish to send email to. Within each folder is a file 
@@ -50,40 +50,37 @@
 #   cat hw04/jschaf/comments.txt
 #		No mistakes!
 
-
-
-
-
-HWxx=$1
-TA=$2
-TAEmail=$(ssh cis120@minus.seas.upenn.edu "cis get email $TA")
-Subject="[cis120] $HWxx - style"
+hwxx=$1
+ta=$2
+ta_email=$(ssh cis120@minus.seas.upenn.edu "cis get email $ta")
+subject="[cis120] $hwxx - style"
 
 send () {
 	pennkey=$1
 
-	StudentEmail=$(ssh cis120@minus.seas.upenn.edu "cis get email $pennkey")
-	CAPNAME=$(ssh cis120@minus.seas.upenn.edu "cis get roster $pennkey | tr [a-z] [A-Z] | tail -1 | grep -ow '[A-Z]*' | head -2 | tail -1")
-	FLETTER=$(echo $CAPNAME | head -c 1)
-	REST=$(echo $CAPNAME | tail -c+2 | tr [A-Z] [a-z])
-	NAME=$FLETTER$REST
+	cptl_name=$(ssh cis120@minus.seas.upenn.edu "cis get roster $pennkey")
+	cptl_name=$(echo $cptl_name | tr [a-z] [A-Z] | tail -1 | grep -ow '[A-Z]*' | head -2 | tail -1)
+	fst_ltr=$(echo $cptl_name | head -c 1)
+	rst_ltrs=$(echo $cptl_name | tail -c+2 | tr [A-Z] [a-z])
 
+	student_name=$fst_ltr$rst_ltrs
+	student_email=$(ssh cis120@minus.seas.upenn.edu "cis get email $pennkey")
+	
 	sp='\n\n'
+	email_message=$sp$(cat $hwxx/$1/comments.txt)$sp
+	email_message=$(cat preamble.txt)$email_message$(cat postamble.txt)
+	email_message=$(printf "$email_message" | sed "s/HWXX/$hwxx/g" | sed "s/NAME/$student_name/g")
 
-	EmailMessage=$(cat preamble.txt)$sp$(cat $HWxx/$1/comments.txt)$sp$(cat postamble.txt)
-
-	EmailMessage=$(printf "$EmailMessage" | sed "s/HWXX/$HWxx/g" | sed "s/NAME/$NAME/g")
-
-	if [ -n "$StudentEmail" ]
+	if [ -n "$student_email" ] && [ $? = 0 ]
 	then
-		ssh $TA@eniac.seas.upenn.edu "printf \"$EmailMessage\" | mail -s '$Subject' -b $TAEmail 'theschafferexperience@gmail.com'"
-		echo "Successfully sent mail to $StudentEmail"
+		ssh $ta@eniac.seas.upenn.edu "printf \"$email_message\" | mail -s '$subject' -b $ta_email '$student_email'"
+		echo "Successfully sent mail to $student_email"
 	else
 		echo "Message to $pennkey failed"
 	fi
 }
 
-for pennkey in $(ls $HWxx)
+for pennkey in $(ls $hwxx)
 do
 	send $pennkey
 done
