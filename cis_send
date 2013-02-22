@@ -23,7 +23,7 @@ cat <<EOF
 
 	- Output = preamble.txt ^ comments.txt ^ postamble.txt
 	- Do not use any double quotes in your txt files
-	- Any instance of the follwing will be replaced accordingly:
+	- Any instance of the following will be replaced accordingly:
 		+ NAME -> will be replaced with the students first name
 		+ HWXX -> will be replaced with the current hw (the input hwxx)
 
